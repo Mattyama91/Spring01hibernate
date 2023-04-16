@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,7 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pl.coderslab.dao.AuthorDao;
 import pl.coderslab.model.Author;
 
+import javax.transaction.Transactional;
+
+@Slf4j
 @Controller
+@Transactional
 public class AuthorController {
     private final AuthorDao authorDao;
 
@@ -46,5 +51,12 @@ public class AuthorController {
         Author author = authorDao.findById(id);
         authorDao.delete(author);
         return "deleted";
+    }
+
+    @RequestMapping("/author/all")
+    @ResponseBody
+    public void findAllAuthor() {
+        authorDao.findAll().forEach(author -> log.info(author.toString()));
+        log.info("siema");
     }
 }

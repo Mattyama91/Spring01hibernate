@@ -1,5 +1,6 @@
 package pl.coderslab.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +12,13 @@ import pl.coderslab.model.Book;
 import pl.coderslab.dao.BookDao;
 import pl.coderslab.model.Publisher;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Controller
+@Transactional
 public class BookController {
     private final BookDao bookDao;
     private final PublisherDao publisherDao;
@@ -65,5 +69,41 @@ public class BookController {
         Book book = bookDao.findById(id);
         bookDao.delete(book);
         return "deleted";
+    }
+
+    @RequestMapping("/book/all")
+    @ResponseBody
+    public void findAllBook() {
+        bookDao.findAll().forEach(book -> log.info(book.toString()));
+        log.info("siema");
+    }
+
+    @RequestMapping("/book/{rating}")
+    @ResponseBody
+    public void findAllByRating(@PathVariable Integer rating) {
+        bookDao.findAllByRating(rating).forEach(book -> log.info(book.toString()));
+    }
+
+    @RequestMapping("/book/publisher")
+    @ResponseBody
+    public void findAllWithPublisher() {
+        bookDao.findAllWithPublisher().forEach(book -> log.info(book.toString()));
+        log.info("siema");
+    }
+
+    @RequestMapping("/book/publisher/{id}")
+    @ResponseBody
+    public void findAllWithSpecificPublisher(@PathVariable Long id) {
+        Publisher publisher = publisherDao.findById(id);
+        bookDao.findAllWithSpecificPublisher(publisher).forEach(book -> log.info(book.toString()));
+        log.info("siema");
+    }
+
+    @RequestMapping("/book/author/{id}")
+    @ResponseBody
+    public void findAllWithSpecificAuthor(@PathVariable Long id) {
+        Author author = authorDao.findById(id);
+        bookDao.findAllWithSpecificAuthor(author).forEach(book -> log.info(book.toString()));
+        log.info("siema");
     }
 }
