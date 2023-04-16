@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,5 +20,9 @@ public class Publisher {
 
     @Column(name = "name")
     private String name;
+
+//    Dla przykładu relacja dwukierunkowa
+//    @OneToMany(mappedBy = "publisher")
+//    private Set<Book> books = new HashSet<>();
 
 }
